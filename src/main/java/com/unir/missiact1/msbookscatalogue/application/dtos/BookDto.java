@@ -4,9 +4,10 @@ import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class BookDto {
-    private Long id;
+    private UUID id;
 
     @NotBlank
     private String title;
@@ -39,8 +40,8 @@ public class BookDto {
     private LocalDateTime updatedAt;
 
     // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

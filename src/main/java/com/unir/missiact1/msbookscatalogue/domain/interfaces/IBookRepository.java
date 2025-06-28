@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface IBookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
+public interface IBookRepository extends JpaRepository<Book, UUID>, JpaSpecificationExecutor<Book> {
 
 	List<Book> findByTitleIgnoreCaseContaining(String title);
 

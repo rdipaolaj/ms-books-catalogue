@@ -3,6 +3,7 @@ package com.unir.missiact1.msbookscatalogue.controller.v1;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class BookControllerV1 {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<BookDto>> update(@PathVariable Long id,
+    public ResponseEntity<ApiResponse<BookDto>> update(@PathVariable UUID id,
                                                        @Valid @RequestBody BookDto dto) {
         BookDto updated = service.update(id, dto);
         ApiResponse<BookDto> body = ApiResponseHelper.createSuccessResponse(updated, "Libro actualizado correctamente");
@@ -50,7 +51,7 @@ public class BookControllerV1 {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<BookDto>> patch(@PathVariable Long id,
+    public ResponseEntity<ApiResponse<BookDto>> patch(@PathVariable UUID id,
                                                       @RequestBody Map<String, Object> updates) {
         BookDto patched = service.patch(id, updates);
         ApiResponse<BookDto> body = ApiResponseHelper.createSuccessResponse(patched, "Libro parcheado correctamente");
@@ -58,14 +59,14 @@ public class BookControllerV1 {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>> delete(@PathVariable UUID id) {
         service.delete(id);
         ApiResponse<String> body = ApiResponseHelper.createSuccessResponse(null, "Libro eliminado correctamente");
         return ResponseEntity.ok(body);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<BookDto>> findById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<BookDto>> findById(@PathVariable UUID id) {
         BookDto dto = service.findById(id);
         ApiResponse<BookDto> body = ApiResponseHelper.createSuccessResponse(dto);
         return ResponseEntity.ok(body);

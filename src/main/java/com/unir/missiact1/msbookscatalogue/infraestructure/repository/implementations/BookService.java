@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,7 +58,7 @@ public class BookService {
         return BookMapper.toDto(saved);
     }
 
-    public BookDto update(Long id, BookDto dto) {
+    public BookDto update(UUID id, BookDto dto) {
         Book existing = bookRepo.findById(id)
             .orElseThrow(() -> new CustomException("Libro no encontrado", ApiErrorCode.NotFound));
         existing.setTitle(dto.getTitle());
@@ -83,7 +84,7 @@ public class BookService {
     }
 
     @Transactional
-    public BookDto patch(Long id, Map<String, Object> updates) {
+    public BookDto patch(UUID id, Map<String, Object> updates) {
         Book existing = bookRepo.findById(id)
             .orElseThrow(() -> new CustomException("Libro no encontrado", ApiErrorCode.NotFound));
         updates.forEach((k, v) -> {
@@ -130,14 +131,14 @@ public class BookService {
         return BookMapper.toDto(saved);
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         if (!bookRepo.existsById(id)) {
             throw new CustomException("Libro no encontrado", ApiErrorCode.NotFound);
         }
         bookRepo.deleteById(id);
     }
 
-    public BookDto findById(Long id) {
+    public BookDto findById(UUID id) {
         return bookRepo.findById(id)
             .map(BookMapper::toDto)
             .orElseThrow(() -> new CustomException("Libro no encontrado", ApiErrorCode.NotFound));
