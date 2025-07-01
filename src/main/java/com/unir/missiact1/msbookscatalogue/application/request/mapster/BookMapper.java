@@ -23,6 +23,8 @@ public class BookMapper {
         d.setPrice(b.getPrice());
         d.setCreatedAt(b.getCreatedAt());
         d.setUpdatedAt(b.getUpdatedAt());
+        d.setCoverImageUrl(b.getCoverImageUrl());
+        d.setStock(b.getStock());
         return d;
     }
 

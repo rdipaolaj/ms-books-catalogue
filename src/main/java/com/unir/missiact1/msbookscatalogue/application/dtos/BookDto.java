@@ -39,6 +39,11 @@ public class BookDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    private Integer stock = 0;
+
+    private String coverImageUrl;
+    public String getCoverImageUrl() { return coverImageUrl; }
+    public void setCoverImageUrl(String u) { this.coverImageUrl = u; }
     // Getters & Setters
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
@@ -81,4 +86,12 @@ public class BookDto {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
 }
