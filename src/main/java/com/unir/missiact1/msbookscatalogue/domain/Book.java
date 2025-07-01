@@ -42,6 +42,8 @@ public class Book {
 
     @Column(length = 2000)
     private String summary;
+    @Column(nullable = false)
+    private Integer stock = 0;
 
     private BigDecimal price;
 
@@ -50,6 +52,9 @@ public class Book {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "cover_image_url")
+    private String coverImageUrl;
 
     @PrePersist
     protected void onCreate() { createdAt = LocalDateTime.now(); }
@@ -93,4 +98,22 @@ public class Book {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    // solo se muestran los nuevos métodos
+    public void decreaseStock(int qty) {
+        if (this.stock < qty) { throw new IllegalStateException("Sin stock"); }
+        this.stock -= qty;
+    }
+    public void increaseStock(int qty) { this.stock += qty; }
+
+    public String getCoverImageUrl() { return coverImageUrl; }
+    public void setCoverImageUrl(String coverImageUrl) { this.coverImageUrl = coverImageUrl; }
 }

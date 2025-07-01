@@ -32,6 +32,12 @@ public class BookCreateRequest {
 
     private BigDecimal price;
 
+    private Integer stock = 0;
+
+    private String coverImageUrl;
+    public String getCoverImageUrl() { return coverImageUrl; }
+    public void setCoverImageUrl(String u) { this.coverImageUrl = u; }
+
     // Getters & Setters
 
     public String getTitle() {
@@ -104,5 +110,13 @@ public class BookCreateRequest {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 }

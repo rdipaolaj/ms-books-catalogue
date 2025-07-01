@@ -1,5 +1,7 @@
 package com.unir.missiact1.msbookscatalogue.infraestructure.repository.implementations;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.unir.missiact1.msbookscatalogue.application.dtos.BookCreateRequest;
 import com.unir.missiact1.msbookscatalogue.application.dtos.BookDto;
 import com.unir.missiact1.msbookscatalogue.application.request.mapster.BookMapper;
@@ -15,7 +17,9 @@ import com.unir.missiact1.msbookscatalogue.domain.interfaces.ICategoryRepository
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -30,13 +34,16 @@ public class BookService {
     private final IAuthorRepository authorRepo;
     private final ICategoryRepository categoryRepo;
 
-    public BookService(IBookRepository bookRepo, IAuthorRepository authorRepo, ICategoryRepository categoryRepo) {
+    private final Cloudinary cloudinary;
+
+    public BookService(IBookRepository bookRepo, IAuthorRepository authorRepo, ICategoryRepository categoryRepo, Cloudinary cloudinary) {
         this.bookRepo = bookRepo;
         this.authorRepo = authorRepo;
         this.categoryRepo = categoryRepo;
+        this.cloudinary = cloudinary;
     }
 
-    public BookDto create(BookCreateRequest req) {
+    public BookDto create(BookCreateRequest req, MultipartFile coverImageFile) throws IOException {
         Author author = authorRepo.findById(req.getAuthorId())
             .orElseThrow(() -> new CustomException("Autor no encontrado", ApiErrorCode.NotFound));
 
@@ -54,6 +61,12 @@ public class BookService {
         book.setAuthor(        author);
         book.setCategory(      category);
 
+        if (coverImageFile != null && !coverImageFile.isEmpty()) {
+            Map<?,?> uploadResult = cloudinary.uploader()
+                    .upload(coverImageFile.getBytes(),
+                            ObjectUtils.asMap("folder", "books"));
+            book.setCoverImageUrl((String) uploadResult.get("secure_url"));
+        }
         Book saved = bookRepo.save(book);
         return BookMapper.toDto(saved);
     }
@@ -158,4 +171,17 @@ public class BookService {
             .map(BookMapper::toDto)
             .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void reserveStock(UUID bookId, int qty) {
+        if (bookRepo.reserveStock(bookId, qty) == 0) {
+            throw new CustomException("Stock insuficiente", ApiErrorCode.OutOfStock);
+        }
+    }
+
+    @Transactional
+    public void releaseStock(UUID bookId, int qty) {
+        bookRepo.releaseStock(bookId, qty);
+    }
+
 }
