@@ -3,7 +3,10 @@ package com.unir.missiact1.msbookscatalogue.application.request.mapster;
 import com.unir.missiact1.msbookscatalogue.application.dtos.BookDto;
 import com.unir.missiact1.msbookscatalogue.domain.Book;
 import com.unir.missiact1.msbookscatalogue.domain.Author;
+import com.unir.missiact1.msbookscatalogue.domain.BookDocument;
 import com.unir.missiact1.msbookscatalogue.domain.Category;
+
+import java.util.UUID;
 
 public class BookMapper {
     public static BookDto toDto(Book b) {
@@ -11,6 +14,7 @@ public class BookMapper {
         BookDto d = new BookDto();
         d.setId(b.getId());
         d.setTitle(b.getTitle());
+        d.setCoverImage(b.getCoverImage());
         d.setAuthorId(b.getAuthor().getId());
         d.setAuthorName(b.getAuthor().getName());
         d.setCategoryId(b.getCategory().getId());
@@ -40,5 +44,24 @@ public class BookMapper {
         Author a = new Author(); a.setId(d.getAuthorId()); b.setAuthor(a);
         Category c = new Category(); c.setId(d.getCategoryId()); b.setCategory(c);
         return b;
+    }
+
+    public static BookDto toDto(BookDocument b) {
+        if (b == null) return null;
+        BookDto d = new BookDto();
+        d.setId(b.getId() != null ? UUID.fromString(b.getId()) : null);
+        d.setTitle(b.getTitle());
+        d.setCoverImage(b.getCoverImage());
+        d.setAuthorName(b.getAuthorName());
+        d.setCategoryName(b.getCategoryName());
+        d.setPublicationDate(b.getPublicationDate());
+        d.setIsbn(b.getIsbn());
+        d.setRating(b.getRating());
+        d.setVisible(b.getVisible());
+        d.setSummary(b.getSummary());
+        d.setPrice(b.getPrice());
+        d.setCreatedAt(b.getCreatedAt());
+        d.setUpdatedAt(b.getUpdatedAt());
+        return d;
     }
 }

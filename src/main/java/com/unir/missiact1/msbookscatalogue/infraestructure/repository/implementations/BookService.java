@@ -12,6 +12,8 @@ import com.unir.missiact1.msbookscatalogue.domain.interfaces.IAuthorRepository;
 import com.unir.missiact1.msbookscatalogue.domain.interfaces.IBookRepository;
 import com.unir.missiact1.msbookscatalogue.domain.interfaces.ICategoryRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -157,5 +159,9 @@ public class BookService {
         return bookRepo.findAll(spec).stream()
             .map(BookMapper::toDto)
             .collect(Collectors.toList());
+    }
+
+    public Page<BookDto> findAll(Pageable pageable) {
+        return bookRepo.findAll(pageable).map(BookMapper::toDto);
     }
 }
