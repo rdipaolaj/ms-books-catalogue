@@ -29,9 +29,6 @@ public class Book {
     @Column(nullable = false)
     private String title;
 
-    @Column(name = "cover_image",length = 512)
-    private String coverImage;
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")
     private Author author;
@@ -51,6 +48,8 @@ public class Book {
 
     @Column(length = 2000)
     private String summary;
+    @Column(nullable = false)
+    private Integer stock = 0;
 
     private BigDecimal price;
 
@@ -60,9 +59,20 @@ public class Book {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "cover_image_url")
+    private String coverImageUrl;
+
     @PrePersist
     protected void onCreate() { createdAt = LocalDateTime.now(); }
 
     @PreUpdate
     protected void onUpdate() { updatedAt = LocalDateTime.now(); }
+
+    // solo se muestran los nuevos métodos
+    public void decreaseStock(int qty) {
+        if (this.stock < qty) { throw new IllegalStateException("Sin stock"); }
+        this.stock -= qty;
+    }
+    public void increaseStock(int qty) { this.stock += qty; }
+
 }

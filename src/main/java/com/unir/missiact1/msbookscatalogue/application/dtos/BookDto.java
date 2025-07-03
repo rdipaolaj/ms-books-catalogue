@@ -18,8 +18,6 @@ public class BookDto {
     @NotBlank
     private String title;
 
-    private String coverImage;
-
     @NotNull
     private Long authorId;
 
@@ -46,4 +44,8 @@ public class BookDto {
     private BigDecimal price;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    private Integer stock = 0;
+
+    private String coverImageUrl;
 }
