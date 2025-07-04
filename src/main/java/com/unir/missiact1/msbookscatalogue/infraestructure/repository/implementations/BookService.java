@@ -81,7 +81,7 @@ public class BookService {
         existing.setIsbn(dto.getIsbn());
         existing.setRating(dto.getRating());
         existing.setVisible(dto.getVisible());
-        existing.setSummary(dto.getSummary());
+        existing.setSummary(dto.getDescription());
         existing.setPrice(dto.getPrice());
         // actualizar author/category si cambia
         if (!existing.getAuthor().getId().equals(dto.getAuthorId())) {

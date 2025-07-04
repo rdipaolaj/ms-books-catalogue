@@ -21,12 +21,12 @@ public class BookDto {
     @NotNull
     private Long authorId;
 
-    private String authorName;
+    private String author;
 
     @NotNull
     private Long categoryId;
 
-    private String categoryName;
+    private String category;
 
     @NotNull
     private LocalDate publicationDate;
@@ -40,12 +40,12 @@ public class BookDto {
     @NotNull
     private Boolean visible;
 
-    private String summary;
+    private String description;
     private BigDecimal price;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     private Integer stock = 0;
 
-    private String coverImageUrl;
+    private String coverImage;
 }

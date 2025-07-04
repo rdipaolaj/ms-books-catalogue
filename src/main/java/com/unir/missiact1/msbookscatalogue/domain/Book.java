@@ -48,6 +48,7 @@ public class Book {
 
     @Column(length = 2000)
     private String summary;
+
     @Column(nullable = false)
     private Integer stock = 0;
 

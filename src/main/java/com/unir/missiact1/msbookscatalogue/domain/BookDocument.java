@@ -27,6 +27,7 @@ public class BookDocument {
     private Boolean visible;
     private String summary;
     private BigDecimal price;
+    private Integer stock;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
