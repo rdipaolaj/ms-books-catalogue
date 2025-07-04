@@ -5,7 +5,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import com.unir.missiact1.msbookscatalogue.application.dtos.BookSearchRequest;
+import com.unir.missiact1.msbookscatalogue.application.request.mapster.BookMapper;
+import com.unir.missiact1.msbookscatalogue.commons.responses.PageResponse;
+import com.unir.missiact1.msbookscatalogue.domain.BookDocument;
+import com.unir.missiact1.msbookscatalogue.infraestructure.repository.implementations.BookSearchService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +35,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping(path = {"/v1/api/books"}, headers = "X-Api-Version=1")
 public class BookControllerV1 {
     private final BookService service;
+    private final BookSearchService searchService;
 
-    public BookControllerV1(BookService service) {
+
+    public BookControllerV1(BookService service, BookSearchService searchService) {
         this.service = service;
+        this.searchService = searchService;
     }
 
     @Operation(summary = "Crear libro", description = "Registra un nuevo libro en el catálogo")
@@ -90,4 +102,36 @@ public class BookControllerV1 {
         ApiResponse<List<BookDto>> body = ApiResponseHelper.createSuccessResponse(results);
         return ResponseEntity.ok(body);
     }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<PageResponse<BookDto>>> findAll(Pageable pageable) {
+        Page<BookDto> page = service.findAll(pageable);
+        PageResponse<BookDto> pageResponse = ApiResponseHelper.toPageResponse(page);
+        ApiResponse<PageResponse<BookDto>> body = ApiResponseHelper.createSuccessResponse(pageResponse);
+        return ResponseEntity.ok(body);
+    }
+
+
+    @PostMapping("/search-elastic")
+    public ResponseEntity<ApiResponse<PageResponse<BookDto>>> searchInElasticsearch(
+            @RequestBody BookSearchRequest req, Pageable pageable) {
+
+        List<BookDocument> documents = searchService.search(req);
+
+        List<BookDto> dtos = documents.stream()
+                .map(BookMapper::toDto)
+                .collect(Collectors.toList());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), dtos.size());
+        if (start > dtos.size()) start = dtos.size();
+
+        Page<BookDto> page = new PageImpl<>(dtos.subList(start, end), pageable, dtos.size());
+
+        PageResponse<BookDto> pageResponse = ApiResponseHelper.toPageResponse(page);
+        ApiResponse<PageResponse<BookDto>> body = ApiResponseHelper.createSuccessResponse(pageResponse);
+
+        return ResponseEntity.ok(body);
+    }
+
 }

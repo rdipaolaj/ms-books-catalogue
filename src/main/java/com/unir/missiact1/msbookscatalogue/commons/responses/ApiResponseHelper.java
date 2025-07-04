@@ -1,5 +1,7 @@
 package com.unir.missiact1.msbookscatalogue.commons.responses;
 
+import org.springframework.data.domain.Page;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -141,5 +143,16 @@ public final class ApiResponseHelper {
         rsp.setData(null);
         rsp.setErrors(validationErrors != null ? validationErrors : new ArrayList<>());
         return rsp;
+    }
+
+    public static <T> PageResponse<T> toPageResponse(Page<T> page) {
+        return new PageResponse<>(
+                page.getContent(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages(),
+                page.isLast()
+        );
     }
 }
