@@ -2,6 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -14,6 +15,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
+		<!-- Usamos Java 24, pero explicitamos release en el plugin -->
 		<java.version>24</java.version>
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
 		<lombok.version>1.18.26</lombok.version>
@@ -34,7 +36,7 @@
 	</dependencyManagement>
 
 	<dependencies>
-		<!-- Lombok -->
+		<!-- Lombok (provided) -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -113,12 +115,18 @@
 
 	<build>
 		<plugins>
-			<!-- Habilita annotation processing para Lombok -->
+			<!-- Compiler plugin configurado para Java 24 + Lombok -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.10.1</version>
 				<configuration>
+					<!-- Le decimos explícitamente al compilador qué release usar -->
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<release>${java.version}</release>
+
+					<!-- Y habilitamos el annotation processing de Lombok -->
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
@@ -129,6 +137,7 @@
 				</configuration>
 			</plugin>
 
+			<!-- Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
