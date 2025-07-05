@@ -5,23 +5,28 @@ primary_region = "gru"
   dockerfile = "Dockerfile"
 
 [env]
-  EUREKA_URL = "https://eureka-server.fly.dev/eureka"
+  EUREKA_URL            = "https://eureka-server.fly.dev/eureka"
+  MYSQLHOST             = "tu-host-mysql"
+  MYSQLPORT             = "3306"
+  MYSQLDATABASE         = "bookscatalogue"
+  MYSQLUSER             = "root"
+  MYSQLPASSWORD         = "admin"
+  CLOUDINARY_CLOUD_NAME = "Root"
+  CLOUDINARY_API_KEY    = "492862172338955"
+  CLOUDINARY_API_SECRET = "Nbm5bttZ-FvCPkG_USAQSCMdhEs"
+  ELASTICSEARCH_URI     = "https://elastic:HYH9SNSckXzLnoCtYpFWkL0R@263359fdf7d14b31a87a4e06893f55ff.us-central1.gcp.cloud.es.io:443"
 
 [http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = "stop"
+  internal_port    = 8080
+  force_https      = true
+  auto_stop_machines  = "stop"
   auto_start_machines = true
   min_machines_running = 0
 
   [[http_service.checks]]
-    method      = "GET"
-    path        = "/actuator/health"
-    interval    = "15s"
-    timeout     = "2s"
-    grace_period= "60s"
-
-[[vm]]
-  memory   = "1gb"
-  cpu_kind = "shared"
-  cpus     = 1
+    type         = "http"
+    interval     = "15s"
+    timeout      = "2s"
+    grace_period = "60s"
+    method       = "GET"
+    path         = "/actuator/health"
